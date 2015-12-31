@@ -2,10 +2,11 @@ import re
 
 response = {
     ".*always.*" : "Why do you think this happens so frequently?",
-    ".*lonely.*" : "I'm sorry you feel that way.",
+    ".*mother.*|.*father.*" : "Tell me more about your parent."
     ".*Argh.*" : "Please be patient with me. I'm trying my best!",
     ".*What do you think?" : "Hm, good question. Can you give me some more details?",
-    "The end" : "Go on."
+    ".*lonely.*" : "I'm sorry you feel that way.",
+    "The end" : "Go on. We're making headway!"
 }
 
 substitution = {
@@ -30,7 +31,7 @@ def conversation():
         statement = input("* ")
         print (formulate_response(statement))
         if statement == "goodbye":
-            print ("Take care, my friend!")
+            print ("That will be $50 for this session, my friend.")
             break
 
 def formulate_response(statement):
