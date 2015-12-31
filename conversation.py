@@ -1,9 +1,16 @@
 import re
 
-reversal = {
+response = {
+    ".*always.*" : "Why do you think this happens so frequently?",
+    ".*lonely.*" : "I'm sorry you feel that way.",
+    ".*Argh.*" : "Please be patient with me. I'm trying my best!",
+    ".*What do you think?" : "Hm, good question. Can you give me some more details?",
+    "The end" : "Go on."
+}
+
+substitution = {
     "me" : "you",
     "my" : "your",
-    "fun" : "enjoyment",
     "I'm" : "you are",
     "I" : "You",
     "am" : "are",
@@ -15,9 +22,9 @@ punctuation = {
     "!": "."
 }
 def conversation():
-    # print ("It's really nice to meet you! What's your name?")
-    # name = input("* ").capitalize()
-    # print "How are you, " + name + "?"
+    print ("It's really nice to meet you! What's your name?")
+    name = input("* ").capitalize()
+    print ("How are you, " + name + "?")
 
     while True:
         statement = input("* ")
@@ -28,10 +35,13 @@ def conversation():
 
 def formulate_response(statement):
     statement = fix_punctuation(statement)
+    for key, value in response.items():
+        if re.match(key, statement, re.IGNORECASE):
+            return (response[key])
     tokens = statement.split()
     for word in tokens:
-        if word in reversal:
-            statement = re.sub(word, reversal[word], statement)
+        if word in substitution:
+            statement = re.sub(word, substitution[word], statement)
     return statement
 
 def fix_punctuation(statement):
@@ -42,15 +52,5 @@ def fix_punctuation(statement):
         changed_statement.append(character)
     statement = "".join(changed_statement)
     return (statement)
-    # if statement == "awesome":
-    #     print "I'm glad to hear that :)"
-    # elif re.search('my', statement):
-    #     print re.sub('my', 'your', statement)
-    # elif statement == "bad":
-    #     print "Well shoot."
-    # else:
-    #     print "I don't quite understand, actually. Would you care to expand?"
-
-# def search_pattern(statement):
 
 conversation()
