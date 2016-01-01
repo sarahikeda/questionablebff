@@ -1,10 +1,12 @@
 import re
+import string
 
 response = {
     ".*always.*" : "Why do you think this happens so frequently?",
-    ".*mother.*|.*father.*" : "Tell me more about your parent."
-    ".*Argh.*" : "Please be patient with me. I'm trying my best!",
+    ".*mother.*|.*father.*" : "Tell me more about your parent.",
+    ".*argh.*" : "Please be patient with me. I'm trying my best!",
     ".*What do you think?" : "Hm, good question. Can you give me some more details?",
+    "need (.*)" : "Are you sure you really need \g<1>?",
     ".*lonely.*" : "I'm sorry you feel that way.",
     "The end" : "Go on. We're making headway!"
 }
@@ -36,13 +38,12 @@ def conversation():
 
 def formulate_response(statement):
     statement = fix_punctuation(statement)
-    for key, value in response.items():
-        if re.match(key, statement, re.IGNORECASE):
-            return (response[key])
     tokens = statement.split()
     for word in tokens:
         if word in substitution:
             statement = re.sub(word, substitution[word], statement)
+    for key, value in response.items():
+        statement = re.sub(key, response[key], statement.lower())
     return statement
 
 def fix_punctuation(statement):
@@ -52,6 +53,6 @@ def fix_punctuation(statement):
             character = punctuation[character]
         changed_statement.append(character)
     statement = "".join(changed_statement)
-    return (statement)
+    return statement
 
 conversation()
