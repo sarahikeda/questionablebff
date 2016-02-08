@@ -1,23 +1,21 @@
 import re
 import string
+import code
+from random import randint
+
+def randomize_response():
+    possibilities = ["Interesting question.", "I'll need to speculate further.", "What a peculiarity!", "Hm, good question. Can you give me some more details?"]
+    length = len(possibilities) - 1
+    choice_index = randint(0,length)
+    return possibilities[choice_index]
 
 response = {
     ".*always.*" : "Why do you think this happens so frequently?",
     ".*mother.*|.*father.*" : "Tell me more about your parent.",
     ".*argh.*" : "Please be patient with me. I'm trying my best!",
-    ".*What do you think?" : "Hm, good question. Can you give me some more details?",
-    "need (.*)" : "Are you sure you really need \g<1>?",
+    ".*need (.*)" : "Are you sure you really need \g<1>?",
     ".*lonely.*" : "I'm sorry you feel that way.",
-    "The end" : "Go on. We're making headway!"
-}
-
-substitution = {
-    "me" : "you",
-    "my" : "your",
-    "I'm" : "you are",
-    "I" : "You",
-    "am" : "are",
-    "was" : "were"
+    "^the end$" : "Go on. We're making headway!"
 }
 
 punctuation = {
@@ -26,7 +24,7 @@ punctuation = {
 }
 def conversation():
     print ("It's really nice to meet you! What's your name?")
-    name = input("* ").capitalize()
+    name = input("* ").title()
     print ("How are you, " + name + "?")
 
     while True:
@@ -37,14 +35,16 @@ def conversation():
             break
 
 def formulate_response(statement):
-    statement = fix_punctuation(statement)
+    statement = fix_punctuation(statement).lower()
     tokens = statement.split()
     for word in tokens:
         if word in substitution:
             statement = re.sub(word, substitution[word], statement)
-    for key, value in response.items():
-        statement = re.sub(key, response[key], statement.lower())
-    return statement
+    for regex in response.keys():
+        if re.search(regex, statement):
+            return re.sub(regex, response[regex], statement)
+    return randomize_response()
+
 
 def fix_punctuation(statement):
     changed_statement = []
