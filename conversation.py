@@ -11,7 +11,7 @@ def randomize_response():
 
 response = {
     ".*always.*" : "Why do you think this happens so frequently?",
-    ".*mother.*|.*father.*" : "Tell me more about your parent.",
+    "(.*mom?(ther)?.*|.*father.*|.*dad.*)" : "Tell me more about your parent.",
     ".*argh.*" : "Please be patient with me. I'm trying my best!",
     ".*need (.*)" : "Are you sure you really need \g<1>?",
     ".*lonely.*" : "I'm sorry you feel that way.",
@@ -36,10 +36,6 @@ def conversation():
 
 def formulate_response(statement):
     statement = fix_punctuation(statement).lower()
-    tokens = statement.split()
-    for word in tokens:
-        if word in substitution:
-            statement = re.sub(word, substitution[word], statement)
     for regex in response.keys():
         if re.search(regex, statement):
             return re.sub(regex, response[regex], statement)
