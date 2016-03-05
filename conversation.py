@@ -2,7 +2,7 @@ import re
 import string
 import code
 from random import randint
-
+# test
 def randomize_response():
     possibilities = ["Interesting question.", "I'll need to speculate further.", "What a peculiarity!", "Hm, good question. Can you give me some more details?"]
     length = len(possibilities) - 1
