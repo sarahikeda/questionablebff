@@ -2,9 +2,15 @@ import re
 import string
 import code
 from random import randint
-# test
+
 def randomize_response():
-    possibilities = ["Interesting question.", "I'll need to speculate further.", "What a peculiarity!", "Hm, good question. Can you give me some more details?"]
+    possibilities = ["Interesting thought.", "I'll need to speculate further.", "What a peculiarity!", "Hm, good idea. Can you give me some more details?"]
+    length = len(possibilities) - 1
+    choice_index = randint(0,length)
+    return possibilities[choice_index]
+
+def answer_question(question):
+    possibilities = ["Interesting question.", "You sure ask good questions!", "Question time is over.", "Hm, good question. Can you fill me in?", "What do you think the answer is?"]
     length = len(possibilities) - 1
     choice_index = randint(0,length)
     return possibilities[choice_index]
@@ -29,17 +35,28 @@ def conversation():
 
     while True:
         statement = input("* ")
-        print (formulate_response(statement))
+        type_response = check_type(statement)
+        print (formulate_response(statement) + " | response type:\t" + type_response)
         if statement == "goodbye":
             print ("That will be $50 for this session, my friend.")
             break
 
+def check_type(statement):
+    if re.search(r'\?|^(how|where|why|who|what|when|are|is|can|which|have|would)\b', statement, re.IGNORECASE):
+        return "question"
+    else:
+        return "statement"
+
 def formulate_response(statement):
-    statement = fix_punctuation(statement).lower()
-    for regex in response.keys():
-        if re.search(regex, statement):
-            return re.sub(regex, response[regex], statement)
-    return randomize_response()
+    type = check_type(statement)
+    if type == "question":
+        return answer_question(statement)
+    else:
+        statement = fix_punctuation(statement).lower()
+        for regex in response.keys():
+            if re.search(regex, statement):
+                return re.sub(regex, response[regex], statement)
+        return randomize_response()
 
 
 def fix_punctuation(statement):
